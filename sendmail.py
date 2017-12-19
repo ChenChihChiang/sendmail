@@ -1,8 +1,8 @@
 from boto3.session import Session
 import aws_config
 import json
-import mail.gmail as gmail
-import mail.alimail as alimail
+import mail.gmail as sendmail
+import time
 
 
 class AwsBackup(object):
@@ -37,7 +37,7 @@ class AwsBackup(object):
 
     def backup_snapshot(self):
         client = self.session.client('ec2')
-        response = client.create_snapshot(VolumeId=aws_config.volumeid, Description='gitea backup')
+        response = client.create_snapshot(VolumeId=volid, Description=desc)
         return response.get('SnapshotId', None)
 
     def remove_snapshot(self, snapshot_id):
@@ -57,9 +57,9 @@ class AwsBackup(object):
 
 
 if __name__ == '__main__':
-    #AwsBackup().run()
-   
-    alimail.sendmail('xxxxx@nuwarobotics.com', 'xxxx', 'xxxxx@nuwarobotics.com', 'test', 'hello')
-    hello = '123\
-             234'
-    gmail.sendmail('xxxxx@gmail.com', 'xxxxx', 'xxxxx@gmail.com', 'test', hello)
+    
+    desc = 'xxxxx'
+    volid = 'xxxxx'
+    AwsBackup().run()
+    finish = time.strftime("%Y/%m/%d %H:%M:%S")
+    sendmail.sendmail('xxxxx@gmail.com', 'xxxxx', 'xxxxx@gmail.com', desc, finish)
